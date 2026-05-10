@@ -52,6 +52,7 @@ async fn main() {
         .allow_headers(Any);
 
     let app = Router::new()
+        .route("/status", get(handlers::get_status))
         .route("/login", post(handlers::login)) // Nouvelle route
         .route("/api/vehicles", get(handlers::list_vehicles))
         .route("/api/vehicles", post(handlers::create_vehicle))

@@ -39,22 +39,21 @@ pub struct MileageEntry {
     pub recorded_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, sqlx::Type)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq)]
+#[cfg_attr(feature = "backend", derive(sqlx::Type))]
 // Si tu stockes "owner", "editor" en minuscules dans ta DB :
-#[sqlx(type_name = "varchar", rename_all = "lowercase")]
+#[cfg_attr(
+    feature = "backend",
+    sqlx(type_name = "varchar", rename_all = "lowercase")
+)]
 pub enum AccessRole {
     Owner,
     Editor,
     Viewer,
 }
 
-//#[derive(Debug, Clone, Serialize, Deserialize)]
-//pub struct VehicleWithAccess {
-//    pub vehicle: Vehicle,
-//    pub my_role: AccessRole,
-//}
-
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[cfg_attr(feature = "backend", derive(sqlx::FromRow))]
 pub struct VehicleWithAccess {
     pub id: Uuid, // L'id qui manquait selon l'erreur
     pub make: String,
@@ -64,7 +63,8 @@ pub struct VehicleWithAccess {
     pub my_role: AccessRole,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, sqlx::FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[cfg_attr(feature = "backend", derive(sqlx::FromRow))]
 pub struct User {
     pub id: Uuid,
     pub username: String,
@@ -72,4 +72,11 @@ pub struct User {
     #[serde(skip_serializing)] // Sécurité : on n'envoie JAMAIS le hash au frontend
     pub password_hash: String,
     pub created_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub struct ApiStatus {
+    pub version: String,
+    pub online: bool,
+    pub message: Option<String>,
 }

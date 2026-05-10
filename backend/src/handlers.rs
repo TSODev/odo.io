@@ -1,5 +1,6 @@
 use bcrypt::{hash, DEFAULT_COST};
-use common::{AccessRole, User, Vehicle, VehicleWithAccess};
+use common::ApiStatus;
+use common::{AccessRole, User, Vehicle, VehicleWithAccess}; // Utilisation du contrat commun
 
 use axum::{
     extract::{Request, State},
@@ -38,6 +39,14 @@ pub struct CreateVehicleRequest {
     pub make: String,
     pub model: String,
     pub plate_number: String,
+}
+
+pub async fn get_status() -> Json<ApiStatus> {
+    Json(ApiStatus {
+        version: "0.1.0-alpha".to_string(),
+        online: true,
+        message: Some("Le serveur est opérationnel".to_string()),
+    })
 }
 
 pub async fn login(
