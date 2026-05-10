@@ -1,0 +1,18 @@
+[package]
+name = "common"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+# Sérialisation indispensable pour l'échange de données JSON
+serde = { workspace = true, features = ["derive"] }
+
+# Gestion des dates (compatible avec Postgres et JS)
+chrono = { workspace = true, features = ["serde"] }
+
+# Gestion des IDs uniques (tes clés étrangères)
+uuid = { version = "1.7", features = ["serde", "v4"] }
+
+# SQLx est nécessaire ici uniquement pour le trait Type 
+# permettant de lier ton Enum Rust à ton Enum Postgres
+sqlx = { workspace = true }
