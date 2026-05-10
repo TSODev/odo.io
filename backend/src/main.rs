@@ -1,3 +1,6 @@
+mod auth; // Déclare le module auth.rs
+mod handlers; // Déclare le module handler
+
 use axum::{
     extract::{Request, State},
     http::StatusCode,
@@ -19,8 +22,6 @@ use tower_http::cors::{Any, CorsLayer};
 use tower_http::trace::TraceLayer;
 use tracing::{error, info, instrument};
 use tracing_subscriber;
-
-mod handlers; // Déclare le module handler
 
 #[tokio::main]
 async fn main() {
@@ -51,7 +52,9 @@ async fn main() {
         .allow_headers(Any);
 
     let app = Router::new()
+        .route("/login", post(handlers::login)) // Nouvelle route
         .route("/api/vehicles", get(handlers::list_vehicles))
+        .route("/api/vehicles", post(handlers::create_vehicle))
         .route("/api/user/register", post(handlers::register))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &axum::http::Request<_>| {
