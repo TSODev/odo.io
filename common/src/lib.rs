@@ -80,3 +80,9 @@ pub struct ApiStatus {
     pub online: bool,
     pub message: Option<String>,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct AuthResponse {
+    pub user: User,
+    pub token: String,
+}
